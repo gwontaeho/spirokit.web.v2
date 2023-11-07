@@ -1,0 +1,15 @@
+{
+  "backend": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-spirokitweb-backend-95845-authRole",
+      "UnauthRoleArn": "arn:aws:iam::892606581130:role/amplify-spirokitweb-backend-95845-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::892606581130:role/amplify-spirokitweb-backend-95845-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-spirokitweb-backend-95845-deployment",
+      "UnauthRoleName": "amplify-spirokitweb-backend-95845-unauthRole",
+      "StackName": "amplify-spirokitweb-backend-95845",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:892606581130:stack/amplify-spirokitweb-backend-95845/ce305b30-7d08-11ee-9efe-06cd63752068",
+      "AmplifyAppId": "d2z4lua9krcg7f"
+    }
+  }
+}
