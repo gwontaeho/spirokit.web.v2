@@ -2,10 +2,14 @@
 import { useState, useEffect } from "react";
 import { RecoilRoot, atom, useRecoilState, useResetRecoilState } from "recoil";
 import { recoilPersist } from "recoil-persist";
+import i18n from "@/locales/i18n";
 
 const { persistAtom } = recoilPersist();
 
 const defaultValue = {
+    config: {
+        lang: "ko",
+    },
     user: {},
     subject: {
         // chartNumber
@@ -19,6 +23,12 @@ const defaultValue = {
     },
 };
 
+const configState = atom({
+    key: "configState",
+    default: defaultValue.config,
+    effects_UNSTABLE: [persistAtom],
+});
+
 const userState = atom({
     key: "userState",
     default: defaultValue.user,
@@ -30,6 +40,21 @@ const subjectState = atom({
     default: defaultValue.subject,
     effects_UNSTABLE: [persistAtom],
 });
+
+export const useConfig = () => {
+    const [isInitial, setIsInitial] = useState(true);
+    const [config, setConfig] = useRecoilState(configState);
+
+    useEffect(() => {
+        setIsInitial(false);
+    }, []);
+
+    useEffect(() => {
+        i18n.changeLanguage(config.lang);
+    }, [config.lang]);
+
+    return [isInitial ? defaultValue.config : config, setConfig];
+};
 
 export const useUser = () => {
     const [isInitial, setIsInitial] = useState(true);

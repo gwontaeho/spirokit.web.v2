@@ -2,17 +2,21 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { getCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { I18nButton } from "@/components";
 
 import { useUser } from "@/recoil";
 import { signin, getMe } from "@/apis";
 import { Loading } from "@/components";
-import { useEffect } from "react";
 
 export default function Signin() {
+    const { t } = useTranslation();
+
     const router = useRouter();
     const [_, setUser] = useUser();
 
@@ -75,11 +79,11 @@ export default function Signin() {
                     <form className="px-8 pb-8 flex flex-col space-y-8" onSubmit={handleSubmit(onSubmit)}>
                         <div className="space-y-4">
                             <div className="flex items-center">
-                                <div className="text-gray-600 w-20">아이디</div>
+                                <div className="text-gray-600 w-24">{t("signin.l.id")}</div>
                                 <input className="input" {...register("loginId", { required: true })} />
                             </div>
                             <div className="flex items-center">
-                                <div className="text-gray-600 w-20">비밀번호</div>
+                                <div className="text-gray-600 w-24">{t("signin.l.pw")}</div>
                                 <input className="input" autoComplete="off" type="password" {...register("password", { required: true })} />
                             </div>
                         </div>
@@ -91,6 +95,9 @@ export default function Signin() {
                         </div>
                         {isError && <div className="text-red-600 text-sm text-center">{errorMessage[status]}</div>}
                     </form>
+                    {/* <div className="flex px-4 pb-4 justify-end">
+                        <I18nButton />
+                    </div> */}
                 </div>
             </main>
             {(isLoading || isSuccess) && <Loading />}
