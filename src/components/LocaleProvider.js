@@ -4,9 +4,11 @@ import "@/locales/i18n";
 import { useConfig } from "@/recoil";
 
 export const LocaleProvider = ({ children }) => {
-    const [config] = useConfig();
+  const [config] = useConfig();
 
-    if (!config.lang) return <body />;
+  console.log(config);
 
-    return <>{children}</>;
+  if (!config.lang) return <body />;
+
+  return <>{children}</>;
 };
