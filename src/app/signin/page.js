@@ -100,9 +100,9 @@ export default function Signin() {
             </div>
             {isError && <div className="text-red-600 text-sm text-center">{errorMessage[status]}</div>}
           </form>
-          <div className="flex px-4 pb-4 justify-end">
+          {/* <div className="flex px-4 pb-4 justify-end">
             <I18nButton />
-          </div>
+          </div> */}
         </div>
       </main>
       {(isLoading || isSuccess) && <Loading />}
