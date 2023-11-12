@@ -64,9 +64,9 @@ export default function Signin() {
     const isSuccess = signinMutation.isSuccess && getMeMutation.isSuccess;
     const status = formError ? 401 : signinMutation.error?.response?.status;
     const errorMessage = {
-        400: "아이디 또는 비밀번호를 확인해 주세요",
-        401: "아이디와 비밀번호를 모두 입력한 후 로그인 버튼을 눌러주세요",
-        403: "관리자의 승인이 필요한 계정입니다",
+        400: t("signin.m.v_1"),
+        401: t("signin.m.v_0"),
+        403: t("signin.m.v_2"),
     };
 
     return (
@@ -88,9 +88,9 @@ export default function Signin() {
                             </div>
                         </div>
                         <div className="flex flex-col space-y-4">
-                            <button className="input w-full">로그인</button>
+                            <button className="input w-full">{t("signin.l.signin")}</button>
                             <Link href="/signup">
-                                <button className="input w-full">회원가입</button>
+                                <button className="input w-full">{t("signin.l.signup")}</button>
                             </Link>
                         </div>
                         {isError && <div className="text-red-600 text-sm text-center">{errorMessage[status]}</div>}

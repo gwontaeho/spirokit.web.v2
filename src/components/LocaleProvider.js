@@ -6,9 +6,7 @@ import { useConfig } from "@/recoil";
 export const LocaleProvider = ({ children }) => {
     const [config] = useConfig();
 
-    // console.log(config.lang);
-
-    if (!config.lang) return null;
+    if (!config.lang) return <body />;
 
     return <>{children}</>;
 };

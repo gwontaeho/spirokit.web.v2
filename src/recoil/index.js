@@ -7,9 +7,7 @@ import i18n from "@/locales/i18n";
 const { persistAtom } = recoilPersist();
 
 const defaultValue = {
-    config: {
-        lang: "ko",
-    },
+    config: {},
     user: {},
     subject: {
         // chartNumber

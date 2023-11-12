@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getCookie } from "cookies-next";
+import { useTranslation } from "react-i18next";
 import { checkid, getCountries, getClinics, getRoles, signup } from "@/apis";
 import { Loading } from "@/components";
 import { useUser } from "@/recoil";
@@ -13,10 +14,10 @@ import { useUser } from "@/recoil";
 const Input = forwardRef(({ label, message, ...rest }, ref) => {
     return (
         <div className="flex">
-            <div className="w-20 h-10 flex items-center">{!!label && <label className="text-sm text-gray-600">{label}</label>}</div>
+            <div className="w-28 h-10 flex items-center">{!!label && <label className="text-sm text-gray-600">{label}</label>}</div>
             <div className="flex flex-col space-y-2">
                 <input {...rest} ref={ref} className="input peer" />
-                {!!message && <span className="text-xs text-gray-400 peer-aria-[invalid=true]:text-red-600">{message}</span>}
+                {!!message && <span className="w-96 text-xs text-gray-400 peer-aria-[invalid=true]:text-red-600">{message}</span>}
             </div>
         </div>
     );
@@ -29,7 +30,7 @@ const Select = forwardRef(({ label, options, ...rest }, ref) => {
 
     return (
         <div className="flex">
-            <div className="w-20 h-10 flex items-center">
+            <div className="w-28 h-10 flex items-center">
                 <label className="text-sm text-gray-600">{label}</label>
             </div>
             <div className="flex flex-col">
@@ -69,6 +70,8 @@ const Select = forwardRef(({ label, options, ...rest }, ref) => {
 Select.displayName = "Select";
 
 export default function Signup() {
+    const { t } = useTranslation();
+
     const router = useRouter();
     const [_, setUser] = useUser();
 
@@ -93,7 +96,7 @@ export default function Signup() {
     const checkidMutation = useMutation({
         mutationFn: (variables) => checkid(variables),
         onSuccess: ({ response }) => {
-            if (response) setError("loginId", { type: "d", message: "이미 사용중인 아이디입니다" });
+            if (response) setError("loginId", { type: "d", message: t("signup.m.v_2") });
             else clearErrors("loginId");
         },
     });
@@ -128,7 +131,7 @@ export default function Signup() {
                         <Image priority src="/logo.svg" alt="logo" width={180} height={30} />
                     </Link>
                     <form className="flex flex-col space-y-8" onSubmit={handleSubmit(onSubmit)}>
-                        <Input {...register("name", { required: true })} label="이름" aria-invalid={!!errors.name} message="이름을 입력하세요" />
+                        <Input {...register("name", { required: true })} label={t("signup.l.nm")} aria-invalid={!!errors.name} message={t("signup.m.v_0")} />
                         <Input
                             {...register("loginId", {
                                 required: true,
@@ -137,15 +140,15 @@ export default function Signup() {
                                     checkid: (value) => checkidMutation.mutate(value),
                                 },
                             })}
-                            label="아이디"
-                            message={errors.loginId?.message || "5글자 이상 20글자 이하인 영문과 숫자를 사용한 아이디를 입력하세요"}
+                            label={t("signup.l.id")}
+                            message={errors.loginId?.message || t("signup.m.v_1")}
                             aria-invalid={!!errors.loginId}
                         />
                         <div className="space-y-2">
                             <Input
                                 {...register("password", { required: true, pattern: { value: REGEX_PASSWORD } })}
                                 type="password"
-                                label="비밀번호"
+                                label={t("signup.l.pw")}
                                 aria-invalid={!!errors.password}
                             />
                             <Input
@@ -154,7 +157,7 @@ export default function Signup() {
                                     validate: (value, formValues) => value === formValues.password,
                                 })}
                                 type="password"
-                                message="8글자 이상 20글자 이하인 영문, 숫자, 특수문자를 포함한 비밀번호를 입력하세요"
+                                message={t("signup.m.v_3")}
                                 aria-invalid={!!errors.confirmPassword}
                             />
                         </div>
@@ -163,7 +166,15 @@ export default function Signup() {
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => {
-                                return <Select {...field} label="국가" disabled={!countries.length} options={countries} aria-invalid={!!errors.alpha2} />;
+                                return (
+                                    <Select
+                                        {...field}
+                                        label={t("signup.l.ctr")}
+                                        disabled={!countries.length}
+                                        options={countries}
+                                        aria-invalid={!!errors.alpha2}
+                                    />
+                                );
                             }}
                         />
                         <Controller
@@ -172,7 +183,13 @@ export default function Signup() {
                             rules={{ required: true }}
                             render={({ field }) => {
                                 return (
-                                    <Select {...field} label="기관" disabled={!alpha2 || !clinics.length} options={clinics} aria-invalid={!!errors.clinicId} />
+                                    <Select
+                                        {...field}
+                                        label={t("signup.l.org")}
+                                        disabled={!alpha2 || !clinics.length}
+                                        options={clinics}
+                                        aria-invalid={!!errors.clinicId}
+                                    />
                                 );
                             }}
                         />
@@ -181,10 +198,18 @@ export default function Signup() {
                             control={control}
                             rules={{ required: true }}
                             render={({ field }) => {
-                                return <Select {...field} label="직책" disabled={!clinicId || !roles.length} options={roles} aria-invalid={!!errors.roleId} />;
+                                return (
+                                    <Select
+                                        {...field}
+                                        label={t("signup.l.role")}
+                                        disabled={!clinicId || !roles.length}
+                                        options={roles}
+                                        aria-invalid={!!errors.roleId}
+                                    />
+                                );
                             }}
                         />
-                        <button className="input w-full">회원가입</button>
+                        <button className="input w-full">{t("signup.l.signup")}</button>
                     </form>
                 </div>
             </main>
