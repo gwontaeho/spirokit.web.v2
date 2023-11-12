@@ -23,9 +23,13 @@ import {
     Clinician,
 } from "./";
 import { Loading } from "@/components";
-import { getSubject, getHistories, getResults, getTrends } from "@/apis";
+
+import { getSubject, getHistories, getResults, getTrends, getPredictTrends } from "@/apis";
 import { CONDITIONS, GRADES, ERROR_CODE } from "@/constants";
 import { useSubject } from "@/recoil";
+
+import minMax from "dayjs/plugin/minMax";
+dayjs.extend(minMax);
 
 const FVC = ({ data }) => {
     const [subject] = useSubject();
@@ -186,8 +190,8 @@ const SVC = ({ data }) => {
     );
 };
 
-export const Trends = ({ data, to }) => {
-    const xValues = new Array(12)
+export const Trends = ({ data, to, lastTrendDate, predictData }) => {
+    const xValues = new Array(6)
         .fill(null)
         .map((_, i) => dayjs(to).subtract(i, "M").format("YYYY-MM"))
         .reverse();
@@ -196,31 +200,74 @@ export const Trends = ({ data, to }) => {
     const fev1 = xValues.map((x) => ({ x, y: data.find(({ date }) => date === x)?.fev1 || null }));
     const pef = xValues.map((x) => ({ x, y: data.find(({ date }) => date === x)?.pef || null }));
     const fef25_75 = xValues.map((x) => ({ x, y: data.find(({ date }) => date === x)?.fef25_75 || null }));
+    const fev1per = xValues.map((x) => ({ x, y: data.find(({ date }) => date === x)?.fev1per || null }));
+
+    const predictFvc = !!predictData.length ? [fvc.find(({ x }) => x === lastTrendDate), ...predictData.map(({ date, fvc }) => ({ x: date, y: fvc }))] : [];
+    const predictFev1 = !!predictData.length ? [fev1.find(({ x }) => x === lastTrendDate), ...predictData.map(({ date, fev1 }) => ({ x: date, y: fev1 }))] : [];
+    const predictPef = !!predictData.length ? [pef.find(({ x }) => x === lastTrendDate), ...predictData.map(({ date, pef }) => ({ x: date, y: pef }))] : [];
+    const predictFef = !!predictData.length
+        ? [fef25_75.find(({ x }) => x === lastTrendDate), ...predictData.map(({ date, fef25_75 }) => ({ x: date, y: fef25_75 }))]
+        : [];
+    const predictFev1per = !!predictData.length
+        ? [fev1per.find(({ x }) => x === lastTrendDate), ...predictData.map(({ date, fev1per }) => ({ x: date, y: fev1per }))]
+        : [];
 
     return (
         <div className="flex-1 space-y-4">
             <div className="card">
                 <div className="p-4 font-medium">FVC</div>
                 <div className="h-80">
-                    <Trend data={[{ id: "trend-fvc", data: fvc }]} />
+                    <Trend
+                        data={[
+                            { id: "trend-fvc", data: fvc },
+                            { id: "predict-fvc", data: predictFvc },
+                        ]}
+                    />
                 </div>
             </div>
             <div className="card">
                 <div className="p-4 font-medium">FEV1</div>
                 <div className="h-80">
-                    <Trend data={[{ id: "trend-fev1", data: fev1 }]} />
+                    <Trend
+                        data={[
+                            { id: "trend-fev1", data: fev1 },
+                            { id: "predict-fvc", data: predictFev1 },
+                        ]}
+                    />
                 </div>
             </div>
             <div className="card">
                 <div className="p-4 font-medium">PEF</div>
                 <div className="h-80">
-                    <Trend data={[{ id: "trend-pef", data: pef }]} />
+                    <Trend
+                        data={[
+                            { id: "trend-pef", data: pef },
+                            { id: "predict-fvc", data: predictPef },
+                        ]}
+                    />
                 </div>
             </div>
             <div className="card">
                 <div className="p-4 font-medium">FEF25-75%</div>
                 <div className="h-80">
-                    <Trend data={[{ id: "trend-fef25_75", data: fef25_75 }]} />
+                    <Trend
+                        data={[
+                            { id: "trend-fef25_75", data: fef25_75 },
+                            { id: "predict-fvc", data: predictFef },
+                        ]}
+                    />
+                </div>
+            </div>
+            <div className="card">
+                <div className="p-4 font-medium">FEV1%</div>
+                <div className="h-80">
+                    <Trend
+                        type="fev1per"
+                        data={[
+                            { id: "trend-fev1per", data: fev1per },
+                            { id: "predict-fev1per", data: predictFev1per },
+                        ]}
+                    />
                 </div>
             </div>
         </div>
@@ -234,7 +281,7 @@ export const Main = () => {
     const { date, date_from, date_to, type = 0 } = subject;
 
     const to = dayjs().format("YYYY-MM");
-    const from = dayjs(to).subtract(11, "M").format("YYYY-MM");
+    const from = dayjs(to).subtract(6, "M").format("YYYY-MM");
 
     const subjectQuery = useQuery({
         queryKey: ["subject", chartNumber],
@@ -272,6 +319,16 @@ export const Main = () => {
     const svcData = svcQuery.data || {};
     const trendsData = trendsQuery.data || {};
 
+    const lastTrendDate = !!(trendsData.response || []).length && dayjs.max((trendsData.response || []).map(({ date }) => dayjs(date))).format("YYYY-MM");
+
+    const predictQuery = useQuery({
+        queryKey: ["trends", chartNumber, lastTrendDate],
+        queryFn: () => getPredictTrends({ chartNumber, date: lastTrendDate }),
+        enabled: chartNumber && !!lastTrendDate,
+    });
+
+    const predictData = predictQuery.data || {};
+
     const { code, subCode } = subjectData;
     const isSuccess = code === 200 && subCode === 0;
     const isError = (code === 200 && subCode === 2004) || subjectQuery.isError;
@@ -303,7 +360,9 @@ export const Main = () => {
                         <>
                             {type === 0 && <FVC data={fvcData.response || {}} />}
                             {type === 1 && <SVC data={svcData.response || {}} />}
-                            {type === 2 && <Trends data={trendsData.response || []} to={to} />}
+                            {type === 2 && (
+                                <Trends data={trendsData.response || []} lastTrendDate={lastTrendDate} predictData={predictData.response || []} to={to} />
+                            )}
                         </>
                     )}
 

@@ -1,38 +1,13 @@
 import axios from "axios";
-import { getCookie, setCookie, deleteCookie } from "cookies-next";
+import { getCookie } from "cookies-next";
 
-// const baseURL = process.env.NEXT_PUBLIC_API_DEV;
-const baseURL = process.env.NEXT_PUBLIC_API_PROD;
+// const baseURL = process.env.NEXT_PUBLIC_API_PROD;
+const baseURL = process.env.NEXT_PUBLIC_API_DEV;
 
-// const axiosInstanceNoInterceptors = axios.create({ baseURL });
 export const axiosInstance = axios.create({ baseURL });
 
 const accessHeader = () => !!getCookie("accessToken") && { headers: { Authorization: `Bearer ${getCookie("accessToken")}` } };
 export const refreshHeader = () => !!getCookie("refreshToken") && { headers: { Authorization: `Bearer ${getCookie("refreshToken")}` } };
-
-// axiosInstance.interceptors.response.use(
-//     (res) => {
-//         return res;
-//     },
-//     async (err) => {
-//         if (err.response.status === 401) {
-//             try {
-//                 const {
-//                     data: {
-//                         response: { accessToken },
-//                     },
-//                 } = await axiosInstanceNoInterceptors.post("/v1/auth/renewal", null, refreshHeader());
-//                 setCookie("accessToken", accessToken);
-//                 err.config.headers.Authorization = `Bearer ${accessToken}`;
-//                 return axios(err.config);
-//             } catch (error) {
-//                 deleteCookie("accessToken");
-//                 deleteCookie("refreshToken");
-//             }
-//         }
-//         return Promise.reject(err);
-//     }
-// );
 
 export const signin = async ({ loginId, password }) => {
     const { data } = await axiosInstance.post("/v1/auth/sign-in", { loginId, password });
@@ -91,7 +66,15 @@ export const getResults = async ({ chartNumber, type, date }) => {
 
 export const getTrends = async ({ chartNumber, from, to, resultFilter }) => {
     const { data } = await axiosInstance.get(
-        `/v1/subjects/${chartNumber}/types/fvc/trends?from=${from}&to=${to}&result-filter=FVC,FEV1,PEF,FEF25_75`,
+        `/v1/subjects/${chartNumber}/types/fvc/trends?from=${from}&to=${to}&result-filter=FVC,FEV1,PEF,FEF25_75,FEV1PER`,
+        accessHeader()
+    );
+    return data;
+};
+
+export const getPredictTrends = async ({ chartNumber, date }) => {
+    const { data } = await axiosInstance.get(
+        `/v1/subjects/${chartNumber}/types/fvc/predict-trends/${date}?result-filter=FVC,FEV1,PEF,FEF25_75,FEV1PER`,
         accessHeader()
     );
     return data;
