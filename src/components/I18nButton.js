@@ -22,7 +22,7 @@ export const I18nButton = () => {
             <ul className="flex space-x-1 [&_button]:p-2">
                 {locales.map(({ label, value }) => {
                     return (
-                        <li ley={`locale-${value}`}>
+                        <li key={`locale-${value}`}>
                             <button onClick={() => setConfig((prev) => ({ ...prev, lang: value }))}>{label}</button>
                         </li>
                     );
