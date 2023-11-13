@@ -36,9 +36,9 @@ export default function RootLayout({ children }) {
             </head>
             <Providers>
                 <Recoil>
-                    <LocaleProvider>
-                        <body className={inter.className}>{children}</body>
-                    </LocaleProvider>
+                    <body className={inter.className}>
+                        <LocaleProvider>{children}</LocaleProvider>
+                    </body>
                 </Recoil>
             </Providers>
         </html>

@@ -1,14 +1,17 @@
 "use client";
+import { useTranslation } from "react-i18next";
 import { useSubject } from "@/recoil";
 
 export const Tabs = ({ svc }) => {
+    const { t } = useTranslation();
+
     const [subject, setSubject] = useSubject();
     const { tab = 0 } = subject;
 
-    const TABS = svc ? ["결과값", "전체 그래프"] : ["결과값", "전체 그래프", "최종 진단"];
+    const TABS = svc ? [t("subject.l.rst_v"), t("subject.l.tot_gph")] : [t("subject.l.rst_v"), t("subject.l.tot_gph"), t("subject.l.f_diag")];
 
     return (
-        <div className="flex w-fit border-b h-12 text-lg [&>div]:flex [&>div]:w-36 [&>div]:justify-center [&>div]:items-center">
+        <div className="flex w-fit border-b h-12 text-lg [&>div]:flex [&>div]:w-48 [&>div]:justify-center [&>div]:items-center">
             {TABS.map((v, i) => (
                 <div
                     aria-selected={tab === i}

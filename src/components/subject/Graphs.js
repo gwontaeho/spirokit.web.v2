@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { COLORS_GRAPH } from "@/constants";
 import { VF, TV } from "./";
 
 export const Graphs = ({ trials }) => {
+    const { t } = useTranslation();
+
     const [selectedTrials, setSelectedTrials] = useState([]);
 
     const pre = trials.filter(({ bronchodilator }) => bronchodilator === "pre");
@@ -30,7 +33,7 @@ export const Graphs = ({ trials }) => {
                 <TV data={tvs} />
                 {!selectedTrials.length && (
                     <div className="absolute rounded-lg w-full h-full bg-black/20 top-0 left-0 flex items-center justify-center">
-                        <p className="text-white text-3xl">그래프를 선택해주세요</p>
+                        <p className="text-white text-3xl">{t("subject.m.i_1")}</p>
                     </div>
                 )}
             </div>

@@ -6,7 +6,7 @@ export default function Devices() {
         <>
             <Nav current="devices" />
             <div className="ml-40">
-                <Header h1="디바이스관리" />
+                <Header h1="layout.l.dvi_mng" />
                 <Main />
             </div>
         </>

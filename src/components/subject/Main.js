@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import {
     Subject,
     Histories,
@@ -32,6 +33,7 @@ import minMax from "dayjs/plugin/minMax";
 dayjs.extend(minMax);
 
 const FVC = ({ data }) => {
+    const { t } = useTranslation();
     const [subject] = useSubject();
     const { tab, pre_g = [], post_g = [] } = subject;
 
@@ -52,7 +54,7 @@ const FVC = ({ data }) => {
                         <TV data={tvs} />
                         {!g.length && (
                             <div className="absolute rounded-lg w-full h-full bg-black/20 top-0 left-0 flex items-center justify-center">
-                                <p className="text-white text-3xl">그래프를 선택해주세요</p>
+                                <p className="text-white text-3xl">{t("subject.m.i_1")}</p>
                             </div>
                         )}
                     </div>
@@ -72,17 +74,17 @@ const FVC = ({ data }) => {
                     <div className="flex space-x-4 h-96">
                         <Quadrant trials={trials} />
                         <div className="card flex-1">
-                            <div className="[&>div]:flex [&>div]:border-b [&>div]:h-12 [&>div>*]:flex [&>div>*]:items-center [&>div>div]:px-4 [&>div>div]:font-medium [&>div>span]:w-36 [&>div>div]:text-primary [&>div>span]:border-r [&>div>span]:justify-center">
+                            <div className="[&>div]:flex [&>div]:border-b [&>div]:h-12 [&>div>*]:flex [&>div>*]:items-center [&>div>div]:px-4 [&>div>div]:font-medium [&>div>span]:w-60 [&>div>div]:text-primary [&>div>span]:border-r [&>div>span]:justify-center">
                                 <div>
-                                    <span>검사등급</span>
+                                    <span>{t("subject.l.mea_lev")}</span>
                                     <div>{diagnosis.suitability}</div>
                                 </div>
                                 <div>
-                                    <span>진단결과</span>
+                                    <span>{t("subject.l.diag_rst")}</span>
                                     <div>{diagnosis.condition?.replaceAll("_", " ")}</div>
                                 </div>
                                 <div>
-                                    <span>에러코드</span>
+                                    <span>{t("subject.l.err_code")}</span>
                                     <div>{diagnosis.errorCode}</div>
                                 </div>
                             </div>
@@ -94,8 +96,8 @@ const FVC = ({ data }) => {
                     </div>
                     <div className="card">
                         <div className="p-4 flex items-center space-x-2">
-                            <div className="font-medium">검사등급</div>
-                            <div className="text-sm">(적합성 및 재현성의 종합 점수)</div>
+                            <div className="font-medium">{t("subject.l.mea_lev")}</div>
+                            <div className="text-sm">({t("subject.m.i_2")})</div>
                         </div>
                         {Object.entries(GRADES).map(([key, value]) => {
                             return (
@@ -114,7 +116,7 @@ const FVC = ({ data }) => {
                     </div>
 
                     <div className="card">
-                        <div className="p-4 font-medium">진단결과</div>
+                        <div className="p-4 font-medium">{t("subject.l.diag_rst")}</div>
                         {Object.entries(CONDITIONS).map(([key, value]) => {
                             return (
                                 <div key={`grade-${key}`} className="text-sm flex border-t [&>div]:flex [&>div]:items-center">
@@ -134,7 +136,7 @@ const FVC = ({ data }) => {
                     <div className="card">
                         <div className="p-4 flex justify-between items-center">
                             <div className="flex items-center space-x-2">
-                                <div className="font-medium">에러코드</div>
+                                <div className="font-medium">{t("subject.l.err_code")}</div>
                                 <div className="text-sm space-x-1 [&>span]:underline [&>span]:underline-offset-4">
                                     (<span>1</span>
                                     <span>2</span>
@@ -144,7 +146,7 @@ const FVC = ({ data }) => {
                                     <span>6</span>)
                                 </div>
                             </div>
-                            <div className="text-sm">*각 자릿수는 설명하는 조건에 부합했다면 1, 아니라면 0으로 표기됩니다.</div>
+                            <div className="text-sm">*{t("subject.m.i_3")}</div>
                         </div>
                         {Object.entries(ERROR_CODE).map(([key, value]) => {
                             return (

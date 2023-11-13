@@ -1,7 +1,10 @@
 "use client";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export const Subject = ({ data }) => {
+    const { t } = useTranslation();
+
     const { chartNumber, name, birthday, gender, subjectDetails = {} } = data;
     const { weight, height, smoking, smokingExperience, smokingPackYear, smokingStartAge, smokingStopAge } = subjectDetails;
     const period = smokingExperience
@@ -14,50 +17,50 @@ export const Subject = ({ data }) => {
 
     return (
         <section className="card w-80">
-            <div className="p-4 font-medium">환자정보</div>
-            <div className="p-4 flex flex-col text-sm space-y-4 [&>div]:flex [&>div>span]:w-24 [&>div>span]:text-gray-400">
+            <div className="p-4 font-medium">{t("subject.l.sbj_inf")}</div>
+            <div className="p-4 flex flex-col text-sm space-y-4 [&>div]:flex [&>div>span]:w-32 [&>div>span]:text-gray-400">
                 <div>
-                    <span>차트넘버</span>
+                    <span>{t("subject.l.cn")}</span>
                     <p>{chartNumber}</p>
                 </div>
                 <div>
-                    <span>이름</span>
+                    <span>{t("subject.l.nm")}</span>
                     <p>{name}</p>
                 </div>
                 <div>
-                    <span>생년월일</span>
+                    <span>{t("subject.l.birth")}</span>
                     <p>{birthday}</p>
                 </div>
                 <div>
-                    <span>성별</span>
-                    <p>{GENDERS[gender]}</p>
+                    <span>{t("subject.l.sex")}</span>
+                    <p>{t(`subject.l.${gender}`)}</p>
                 </div>
                 <div>
-                    <span>몸무게</span>
+                    <span>{t("subject.l.wgt")}</span>
                     <p>{weight} kg</p>
                 </div>
                 <div>
-                    <span>키</span>
+                    <span>{t("subject.l.hgt")}</span>
                     <p>{height} cm</p>
                 </div>
                 <div>
-                    <span>흡연경험</span>
-                    <p>{smokingExperience ? "있음" : "없음"}</p>
+                    <span>{t("subject.l.exp")}</span>
+                    <p>{smokingExperience ? t("subject.l.y") : t("subject.l.n")}</p>
                 </div>
                 <div>
-                    <span>흡연여부</span>
-                    <p>{smokingExperience ? (smoking ? "흡연" : "금연") : "-"}</p>
+                    <span>{t("subject.l.cur")}</span>
+                    <p>{smokingExperience ? (smoking ? t("subject.l.y") : t("subject.l.y")) : "-"}</p>
                 </div>
                 <div>
-                    <span>연간흡연량</span>
-                    <p>{!!smokingPackYear ? `${smokingPackYear}갑` : "-"}</p>
+                    <span>{t("subject.l.p_year")}</span>
+                    <p>{!!smokingPackYear ? `${smokingPackYear}${t("subject.l.pack")}` : "-"}</p>
                 </div>
                 <div>
-                    <span>흡연기간</span>
+                    <span>{t("subject.l.period")}</span>
                     <p>{period}</p>
                 </div>
                 <Link href={`/subjects/${chartNumber}/update`}>
-                    <button className="input h-8 w-full">정보수정</button>
+                    <button className="input h-8 w-full">{t("subject.l.mdf")}</button>
                 </Link>
             </div>
         </section>

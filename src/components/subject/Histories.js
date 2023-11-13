@@ -2,9 +2,12 @@
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSubject } from "@/recoil";
 
 const Modal = ({ setOpen, date_from, date_to }) => {
+    const { t } = useTranslation();
+
     const [_, setSubject] = useSubject();
 
     const [from, setFrom] = useState(date_from || "");
@@ -36,20 +39,20 @@ const Modal = ({ setOpen, date_from, date_to }) => {
                 <Image priority src="/logo.svg" alt="logo" width={120} height={20} />
                 <div className="flex space-x-4">
                     <div className="flex flex-1 flex-col space-y-2">
-                        <label className="text-sm text-gray-400">시작일시</label>
+                        <label className="text-sm text-gray-400">{t("subject.l.start")}</label>
                         <input type="date" className="input w-full" value={from} onChange={handleChangeFrom} />
                     </div>
                     <div className="flex flex-1 flex-col space-y-2">
-                        <label className="text-sm text-gray-400">종료일시</label>
+                        <label className="text-sm text-gray-400">{t("subject.l.end")}</label>
                         <input type="date" className="input w-full" value={to} onChange={handleChangeTo} />
                     </div>
                 </div>
                 <div className="flex space-x-4">
                     <button className="input" onClick={() => setOpen(false)}>
-                        닫기
+                        {t("subject.l.close")}
                     </button>
                     <button className="input" onClick={handleConfirm}>
-                        확인
+                        {t("subject.l.ok")}
                     </button>
                 </div>
             </div>
@@ -58,6 +61,8 @@ const Modal = ({ setOpen, date_from, date_to }) => {
 };
 
 export const Histories = ({ data }) => {
+    const { t } = useTranslation();
+
     const [subject, setSubject] = useSubject();
     const { chartNumber, date, date_from, date_to } = subject;
 
@@ -66,15 +71,15 @@ export const Histories = ({ data }) => {
     return (
         <>
             <section className="card">
-                <div className="p-4 font-medium">검사이력</div>
+                <div className="p-4 font-medium">{t("subject.l.mea_his")}</div>
                 <div className="flex justify-between items-center p-4 text-primary text-sm [&>button]:text-lg">
-                    <div>{!date_from && !date_to ? "전체" : `${date_from || ""} ~ ${date_to || ""}`}</div>
+                    <div>{!date_from && !date_to ? t("subject.l.all") : `${date_from || ""} ~ ${date_to || ""}`}</div>
                     <button className="material-symbols-outlined" onClick={() => setOpen(true)}>
                         date_range
                     </button>
                 </div>
                 <ul className="text-sm max-h-96 overflow-y-auto [&>li]:p-4">
-                    {!data.length && <li>검사이력이 없습니다</li>}
+                    {!data.length && <li>{t("subject.m.i_0")}</li>}
                     {data.map((v) => (
                         <li
                             aria-selected={v === date}

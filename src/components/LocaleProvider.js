@@ -1,14 +1,30 @@
 "use client";
 
 import "@/locales/i18n";
-import { useConfig } from "@/recoil";
+import i18n from "@/locales/i18n";
+
+import { useState, useEffect, createContext } from "react";
+import { Loading } from "./Loading";
+
+export const LocaleContext = createContext();
 
 export const LocaleProvider = ({ children }) => {
-  const [config] = useConfig();
+    const [lang, setLang] = useState();
 
-  //   console.log(config);
+    useEffect(() => {
+        setLang(localStorage.getItem("lang") || "ko");
+    }, []);
 
-  if (!config.lang) return <body />;
+    useEffect(() => {
+        if (!lang) return;
+        localStorage.setItem("lang", lang);
+        i18n.changeLanguage(lang);
+    }, [lang]);
 
-  return <>{children}</>;
+    return (
+        <>
+            <LocaleContext.Provider value={{ lang, setLang }}>{children}</LocaleContext.Provider>
+            {!lang && <div className="fixed top-0 w-full h-full bg-white" />}
+        </>
+    );
 };

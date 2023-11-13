@@ -6,7 +6,7 @@ export default function Update() {
         <>
             <Nav />
             <div className="ml-40">
-                <Header h1="환자수정" />
+                <Header h1="layout.l.sbj_upt" />
                 <Main />
             </div>
         </>

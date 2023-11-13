@@ -6,7 +6,7 @@ export default function Clinicians() {
         <>
             <Nav current="clinicians" />
             <div className="ml-40">
-                <Header h1="의료진관리" />
+                <Header h1="layout.l.cli_mng" />
                 <Main />
             </div>
         </>

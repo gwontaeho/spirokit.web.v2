@@ -6,7 +6,7 @@ export default function Subject() {
         <>
             <Nav current="subject" />
             <div className="ml-40">
-                <Header h1="검사결과" />
+                <Header h1={"layout.l.rst"} />
                 <Main />
             </div>
         </>

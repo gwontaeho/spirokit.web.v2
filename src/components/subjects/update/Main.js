@@ -3,6 +3,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useTranslation } from "react-i18next";
 import { useRouter, useParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -11,6 +12,8 @@ import { getSubject, getClinicians, updateSubject } from "@/apis";
 import { RACES } from "@/constants";
 
 const Modal = ({ setOpen, onConfirm }) => {
+    const { t } = useTranslation();
+
     useEffect(() => {
         document.body.style.overflow = "hidden";
         return () => {
@@ -22,13 +25,13 @@ const Modal = ({ setOpen, onConfirm }) => {
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/30" onClick={() => setOpen(false)}>
             <div className="card w-[400px] p-4 space-y-8" onClick={(e) => e.stopPropagation()}>
                 <Image priority src="/logo.svg" alt="logo" width={120} height={20} />
-                <div className="text-center">환자를 수정하시겠습니까?</div>
+                <div className="text-center">{t("reg_upt.m.upt")}</div>
                 <div className="flex space-x-4">
                     <button className="input" onClick={() => setOpen(false)}>
-                        닫기
+                        {t("reg_upt.l.cancel")}
                     </button>
                     <button className="input" onClick={onConfirm}>
-                        확인
+                        {t("reg_upt.l.ok")}
                     </button>
                 </div>
             </div>
@@ -37,6 +40,7 @@ const Modal = ({ setOpen, onConfirm }) => {
 };
 
 export const Main = () => {
+    const { t } = useTranslation();
     const { chartNumber } = useParams();
     const router = useRouter();
 
@@ -113,7 +117,7 @@ export const Main = () => {
                         <fieldset className="flex space-x-16 pb-8 border-b">
                             <Input
                                 {...register("chartNumber", { required: true, pattern: REGEX_CHARTNUMBER })}
-                                label="차트넘버"
+                                label={t("reg_upt.l.cn")}
                                 aria-invalid={!!errors.chartNumber}
                                 maxLength={20}
                                 disabled
@@ -126,7 +130,7 @@ export const Main = () => {
                                     return (
                                         <Select
                                             {...field}
-                                            label="담당자"
+                                            label={t("reg_upt.l.cli")}
                                             disabled={!clinicians.length}
                                             options={clinicians}
                                             aria-invalid={!!errors.clinicianId}
@@ -137,19 +141,19 @@ export const Main = () => {
                         </fieldset>
                         <div className="flex space-x-16">
                             <fieldset className="space-y-8">
-                                <Input {...register("name", { required: true })} label="이름" aria-invalid={!!errors.name} />
+                                <Input {...register("name", { required: true })} label={t("reg_upt.l.nm")} aria-invalid={!!errors.name} />
                                 <Radio
                                     {...register("gender", { required: true })}
-                                    label="성별"
+                                    label={t("reg_upt.l.sex")}
                                     options={[
-                                        { key: "남", value: "m" },
-                                        { key: "여", value: "f" },
+                                        { key: t("reg_upt.l.m"), value: "m" },
+                                        { key: t("reg_upt.l.f"), value: "f" },
                                     ]}
                                     aria-invalid={!!errors.gender}
                                 />
                                 <Input
                                     {...register("subjectDetails.height", { required: true, pattern: REGEX_REALNUMBER })}
-                                    label="신장"
+                                    label={t("reg_upt.l.hgt")}
                                     maxLength={6}
                                     aria-invalid={!!errors.subjectDetails?.height}
                                     unit="cm"
@@ -157,14 +161,14 @@ export const Main = () => {
 
                                 <Input
                                     {...register("subjectDetails.weight", { required: true, pattern: REGEX_REALNUMBER })}
-                                    label="체중"
+                                    label={t("reg_upt.l.wgt")}
                                     maxLength={6}
                                     aria-invalid={!!errors.subjectDetails?.weight}
                                     unit="kg"
                                 />
                                 <Input
                                     {...register("birthday", { required: true, pattern: REGEX_BIRTHDAY })}
-                                    label="생년월일"
+                                    label={t("reg_upt.l.birth")}
                                     placeholder="YYYYMMDD"
                                     maxLength={8}
                                     disabled
@@ -197,10 +201,10 @@ export const Main = () => {
                                             }
                                         },
                                     })}
-                                    label="흡연경험"
+                                    label={t("reg_upt.l.exp")}
                                     options={[
-                                        { key: "있음", value: true },
-                                        { key: "없음", value: false },
+                                        { key: t("reg_upt.l.y"), value: true },
+                                        { key: t("reg_upt.l.n"), value: false },
                                     ]}
                                     aria-invalid={!!errors.subjectDetails?.smokingExperience}
                                 />
@@ -214,24 +218,24 @@ export const Main = () => {
                                             }
                                         },
                                     })}
-                                    label="현재 흡연여부"
+                                    label={t("reg_upt.l.curr")}
                                     options={[
-                                        { key: "흡연", value: true },
-                                        { key: "금연", value: false },
+                                        { key: t("reg_upt.l.smok"), value: true },
+                                        { key: t("reg_upt.l.n_smok"), value: false },
                                     ]}
                                     aria-invalid={!!errors.subjectDetails?.smoking}
                                     disabled={smokingExperience !== "true"}
                                 />
                                 <Input
                                     {...register("subjectDetails.smokingStartAge", { required: smokingExperience === "true", pattern: REGEX_INTEGER })}
-                                    label="흡연을 시작한 나이"
+                                    label={t("reg_upt.l.age_start")}
                                     aria-invalid={!!errors.subjectDetails?.smokingStartAge}
                                     maxLength={3}
                                     disabled={smokingExperience !== "true"}
                                 />
                                 <Input
                                     {...register("subjectDetails.smokingPackYear", { required: smokingExperience === "true", pattern: REGEX_INTEGER })}
-                                    label="연간 흡연량"
+                                    label={t("reg_upt.l.p_year")}
                                     aria-invalid={!!errors.subjectDetails?.smokingPackYear}
                                     maxLength={3}
                                     disabled={smokingExperience !== "true"}
@@ -241,7 +245,7 @@ export const Main = () => {
                                         required: smoking === "false",
                                         pattern: REGEX_INTEGER,
                                     })}
-                                    label="금연한 나이"
+                                    label={t("reg_upt.l.age_stop")}
                                     aria-invalid={!!errors.subjectDetails?.smokingStopAge}
                                     maxLength={3}
                                     disabled={smokingExperience !== "true" || smoking !== "false"}
@@ -251,9 +255,9 @@ export const Main = () => {
                     </div>
                     <div className="flex space-x-4">
                         <button className="input flex-1" type="button" onClick={() => router.back()}>
-                            취소
+                            {t("reg_upt.l.cancel")}
                         </button>
-                        <button className="input flex-1">수정</button>
+                        <button className="input flex-1">{t("reg_upt.l.upt")}</button>
                     </div>
                 </form>
             </main>
