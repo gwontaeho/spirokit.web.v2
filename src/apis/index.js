@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getCookie } from "cookies-next";
 
-// const baseURL = process.env.NEXT_PUBLIC_API_PROD;
-const baseURL = process.env.NEXT_PUBLIC_API_DEV;
+const baseURL = process.env.NEXT_PUBLIC_API_PROD;
+// const baseURL = process.env.NEXT_PUBLIC_API_DEV;
 
 export const axiosInstance = axios.create({ baseURL });
 
