@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import html2canvas from "html2canvas";
 import dayjs from "dayjs";
 import jsPDF from "jspdf";
+import { useTranslation } from "react-i18next";
 import { Calibration, Graph } from "@/components/devices";
 import { getDevices, getCalibrations, getCalibration } from "@/apis";
 
@@ -83,6 +84,8 @@ const Report = ({ selectedDevice, calibration }) => {
 };
 
 export const Main = () => {
+    const { t } = useTranslation();
+
     const [selectedDevice, setSelectedDevice] = useState();
     const [selectedCalibration, setSelectedCalibration] = useState();
 
@@ -136,11 +139,11 @@ export const Main = () => {
             <main className="flex p-8 space-x-8">
                 <div className="space-y-4">
                     <section className="w-80 card">
-                        <div className="p-4 font-medium">디바이스 목록</div>
+                        <div className="p-4 font-medium">{t("dev.l.list")}</div>
                         <ul className="text-sm [&>li]:p-4 [&>li]:flex [&>li>span]:w-28">
                             <li>
-                                <span>제조번호</span>
-                                <p>보정횟수</p>
+                                <span>{t("dev.l.sn")}</span>
+                                <p>{t("dev.l.cnt")}</p>
                             </li>
                             {devices.map(({ serialNumber, calibrationCount }) => (
                                 <li
@@ -158,7 +161,7 @@ export const Main = () => {
 
                     {!!selectedDevice && (
                         <section className="card">
-                            <div className="p-4 font-medium">보정이력</div>
+                            <div className="p-4 font-medium">{t("dev.l.his")}</div>
                             <ul className="text-sm max-h-96 overflow-y-auto [&>li]:p-4">
                                 {calibrations.map(({ calibrationId, date }) => (
                                     <li
@@ -176,7 +179,7 @@ export const Main = () => {
 
                     {!!selectedCalibration && (
                         <section className="card">
-                            <div className="p-4 font-medium">보정결과 내려받기</div>
+                            <div className="p-4 font-medium">{t("dev.l.down")}</div>
                             <div className="flex items-center justify-center space-x-4 text-sm p-4">
                                 <button className="input h-8 w-fit" onClick={handleClickJpg}>
                                     JPG

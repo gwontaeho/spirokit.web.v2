@@ -53,34 +53,33 @@ export const Main = () => {
             <main className="flex flex-col p-8 space-y-4">
                 <div className="flex justify-between">
                     <form className="flex space-x-4" onSubmit={handleSubmit(onSubmit)}>
-                        <input {...register("chartNumber")} className="input w-48 lg:w-96" placeholder="차트넘버로 검색" />
+                        <input {...register("chartNumber")} className="input w-48 lg:w-96" placeholder={t("subjects.m.p_0")} />
                         <button className="material-symbols-outlined input w-fit">search</button>
                     </form>
                     <Link href="/subjects/regist">
-                        <button className="input w-fit lg:w-96">환자등록</button>
+                        <button className="input w-fit lg:w-96">{t("subjects.l.sbj_reg")}</button>
                     </Link>
                 </div>
                 <div className="flex-1 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    {s.map((v, i) => {
+                    {s.map((v) => {
                         const { birthday, chartNumber, gender, name } = v;
-                        const GENDERS = { m: "남", f: "여" };
                         return (
                             <Link key={`subject-${chartNumber}`} href={`subjects/${chartNumber}`}>
-                                <div className="card cursor-pointer h-40 p-4 flex flex-col justify-between [&>div]:flex [&>div]:items-center [&>div>span]:w-24 [&>div>span]:text-gray-400 [&>div>span]:text-sm hover:bg-gray-100">
+                                <div className="card cursor-pointer h-40 p-4 flex flex-col justify-between [&>div]:flex [&>div]:items-center [&>div>span]:w-32 [&>div>span]:text-gray-400 [&>div>span]:text-sm hover:bg-gray-100">
                                     <div>
-                                        <span>이름</span>
+                                        <span>{t("subjects.l.nm")}</span>
                                         <p className="text-primary">{name}</p>
                                     </div>
                                     <div>
-                                        <span>차트넘버</span>
+                                        <span>{t("subjects.l.cn")}</span>
                                         <p>{chartNumber}</p>
                                     </div>
                                     <div>
-                                        <span>성별</span>
-                                        <p>{GENDERS[gender]}</p>
+                                        <span>{t("subjects.l.sex")}</span>
+                                        <p>{t(`subjects.l.${gender}`)}</p>
                                     </div>
                                     <div>
-                                        <span>생년월일</span>
+                                        <span>{t("subjects.l.birth")}</span>
                                         <p>{birthday}</p>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { getCookie, deleteCookie } from "cookies-next";
 
 import { Loading } from "@/components";
@@ -10,6 +11,7 @@ import { useUser, useSubject } from "@/recoil";
 import { getMe } from "@/apis";
 
 export const Main = () => {
+    const { t } = useTranslation();
     const router = useRouter();
 
     const [, , resetUser] = useUser();
@@ -34,18 +36,18 @@ export const Main = () => {
         <>
             <main className="p-8">
                 <section className="card w-80">
-                    <div className="p-4 font-medium">계정정보</div>
+                    <div className="p-4 font-medium">{t("reg_upt.l.act_inf")}</div>
                     <div className="p-4 flex flex-col text-sm space-y-4 [&>div]:flex [&>div>span]:w-24 [&>div>span]:text-gray-400">
                         <div>
-                            <span>이름</span>
+                            <span>{t("reg_upt.l.nm")}</span>
                             <p>{name}</p>
                         </div>
                         <div>
-                            <span>직책</span>
+                            <span>{t("reg_upt.l.role")}</span>
                             <p>{clinicianRoleName}</p>
                         </div>
                         <button className="input h-8 w-full" onClick={handleClickSignout}>
-                            로그아웃
+                            {t("reg_upt.l.out")}
                         </button>
                     </div>
                 </section>

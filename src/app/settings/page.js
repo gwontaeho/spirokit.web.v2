@@ -6,7 +6,7 @@ export default function Subjects() {
         <>
             <Nav />
             <div className="ml-40">
-                <Header h1="설정" />
+                <Header h1="layout.l.settings" />
                 <Main />
             </div>
         </>

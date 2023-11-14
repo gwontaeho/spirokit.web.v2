@@ -2,9 +2,12 @@
 import html2canvas from "html2canvas";
 import dayjs from "dayjs";
 import jsPDF from "jspdf";
+import { useTranslation } from "react-i18next";
 import { useSubject } from "@/recoil";
 
 export const Types = ({ options }) => {
+    const { t } = useTranslation();
+
     const [subject, setSubject] = useSubject();
     const { chartNumber, type = 0 } = subject;
 
@@ -39,7 +42,7 @@ export const Types = ({ options }) => {
 
     return (
         <section className="card">
-            <div className="p-4 font-medium">검사유형</div>
+            <div className="p-4 font-medium">{t("subject.l.mea_type")}</div>
             {options.map(({ label, isNull, isLoading, hasReport }, i) => {
                 return (
                     <div key={`type-${label}`} className="flex text-sm p-4 h-16 items-center">
@@ -57,7 +60,7 @@ export const Types = ({ options }) => {
                         {hasReport &&
                             !isLoading &&
                             (isNull ? (
-                                <p>검사결과가 없습니다</p>
+                                <p>{t("subject.m.i_0")}</p>
                             ) : (
                                 <div className="flex space-x-2">
                                     <button className="input w-fit h-8" onClick={() => handleClickJpg(i)}>

@@ -6,7 +6,7 @@ export default function Subjects() {
         <>
             <Nav current="subjects" />
             <div className="ml-40">
-                <Header h1="환자검색" />
+                <Header h1="layout.l.sch_sbj" />
                 <Main />
             </div>
         </>

@@ -6,7 +6,7 @@ export default function Regist() {
         <>
             <Nav />
             <div className="ml-40">
-                <Header h1="환자등록" />
+                <Header h1="layout.l.sbj_reg" />
                 <Main />
             </div>
         </>

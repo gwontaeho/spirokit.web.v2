@@ -1,5 +1,5 @@
 "use client";
-
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -8,6 +8,8 @@ import { Loading } from "@/components";
 import { getClinicians, updateClinicianStatus } from "@/apis";
 
 export const Main = () => {
+    const { t } = useTranslation();
+
     const perPage = 16;
     const [name, setName] = useState("");
     const [page, setPage] = useState(1);
@@ -41,7 +43,7 @@ export const Main = () => {
         <>
             <main className="p-8 space-y-4">
                 <form className="flex space-x-4" onSubmit={handleSubmit(onSubmit)}>
-                    <input {...register("name")} className="input" placeholder="이름으로 검색" />
+                    <input {...register("name")} className="input" placeholder={t("cli.m.p_0")} />
                     <button className="material-symbols-outlined input w-fit">search</button>
                 </form>
                 <div className="flex-1 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -51,28 +53,28 @@ export const Main = () => {
                         return (
                             <div
                                 key={`clinician-${clinicianId}`}
-                                className="relative card h-40 p-4 flex flex-col justify-between [&>div]:flex [&>div]:items-center [&>div>span]:w-24 [&>div>span]:text-gray-400 [&>div>span]:text-sm"
+                                className="relative card h-40 p-4 flex flex-col justify-between [&>div]:flex [&>div]:items-center [&>div>span]:w-32 [&>div>span]:text-gray-400 [&>div>span]:text-sm"
                             >
                                 <div>
-                                    <span>이름</span>
+                                    <span>{t("cli.l.nm")}</span>
                                     <p className="text-primary">{clinicianName}</p>
                                 </div>
                                 <div>
-                                    <span>직책</span>
+                                    <span>{t("cli.l.role")}</span>
                                     <p>{roleName}</p>
                                 </div>
                                 <div>
-                                    <span>등록일자</span>
+                                    <span>{t("cli.l.reg_dt")}</span>
                                     <p>{date}</p>
                                 </div>
                                 <div>
-                                    <span>승인관리</span>
+                                    <span>{t("cli.l.aut_man")}</span>
                                     <p data-status={status} className="text-green-600 data-[status=disabled]:text-red-600">
-                                        {status === "enabled" ? "승인" : "거부"}
+                                        {status === "enabled" ? t("cli.l.aut") : t("cli.l.den")}
                                     </p>
                                 </div>
                                 <button className="bottom-4 right-4 absolute input h-8 w-fit" onClick={() => handleClick({ clinicianId, status })}>
-                                    {status === "enabled" ? "거부" : "승인"}
+                                    {status === "enabled" ? t("cli.l.den") : t("cli.l.aut")}
                                 </button>
                             </div>
                         );

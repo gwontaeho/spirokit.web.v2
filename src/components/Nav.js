@@ -1,16 +1,19 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 import { useSubject } from "@/recoil";
 
 export const Nav = ({ current }) => {
+    const { t } = useTranslation();
+
     const [subject] = useSubject();
     const { chartNumber } = subject;
 
     const PAGES = [
-        { label: "환자검색", page: "subjects" },
-        { label: "의료진관리", page: "clinicians" },
-        { label: "디바이스관리", page: "devices" },
+        { label: "layout.l.sch_sbj", page: "subjects" },
+        { label: "layout.l.cli_mng", page: "clinicians" },
+        { label: "layout.l.dvi_mng", page: "devices" },
     ];
 
     return (
@@ -29,14 +32,14 @@ export const Nav = ({ current }) => {
                                 aria-current={current === page && "page"}
                                 className="block py-4 text-center border-l-2 border-white hover:text-primary aria-[current=page]:bg-slate-100 aria-[current=page]:border-primary aria-[current=page]:text-primary"
                             >
-                                {label}
+                                {t(label)}
                             </Link>
                         </li>
                     );
                 })}
             </ul>
             <div className="mt-auto px-2 py-4">
-                <div className="text-center text-gray-400">최근검색</div>
+                <div className="text-center text-gray-400">{t("layout.l.rct_sch")}</div>
                 <ul className="lex flex-col">
                     <li>
                         <Link
