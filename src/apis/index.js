@@ -45,7 +45,7 @@ export const getRoles = async (clinicId) => {
 };
 
 export const getSubjects = async ({ chartNumber, page, size }) => {
-    const { data } = await axiosInstance.get(`/v2/subjects?chart-number=${chartNumber}&page=${page}&size=${size}`, accessHeader());
+    const { data } = await axiosInstance.get(`/v3/subjects?chart-number=${chartNumber}&page=${page}&size=${size}`, accessHeader());
     return data;
 };
 

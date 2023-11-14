@@ -52,7 +52,7 @@
             "birth": "Date of birth"
         },
         "m": {
-            "p_0": "Search by chart no."
+            "p_0": "Search by chart number or name"
         }
     },
     "subject": {
