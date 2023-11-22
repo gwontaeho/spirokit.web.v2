@@ -225,7 +225,7 @@ export const ReportFVC = ({ data }) => {
     { l: "PEFT", t: "PEFT", u: "s" },
     { l: "FET100%", t: "FET", u: "s" },
     { l: "FIVC", t: "FIVC", u: "L" },
-    { l: "Vol Extrap", t: "VEXT", u: "L" },
+    { l: "Vol Extrap", t: "VEXT", u: "mL" },
   ];
 
   return (
