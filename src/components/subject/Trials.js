@@ -22,7 +22,7 @@ export const Trials = ({ trials, type, svc }) => {
         <ul className="card relative overflow-y-auto flex flex-1 text-center text-xs [&>li]:flex-1 [&>li>*]:flex [&>li>*]:items-center [&>li>*]:justify-center [&>li>*]:h-12">
             <li className="h-fit">
                 <p className="sticky top-0 bg-header">{type.toUpperCase()}</p>
-                <p>{i18n("subject.l.mea_time")}</p>
+                {/* <p>{i18n("subject.l.mea_time")}</p> */}
                 {titles.map(({ title, unit }) => (
                     <p key={`title-fvc-${title}`}>
                         {title}({unit})
